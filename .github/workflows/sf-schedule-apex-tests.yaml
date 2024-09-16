@@ -16,10 +16,10 @@ jobs:
 
       - name: Populate auth file with SFDX_URL secret of org
         shell: bash
-        run: echo "${{ secrets.SFDX_ORG_URL }}" > SFDX_ORG_URL.txt
+        run: echo "${{ secrets.SFDX_ORG_URL }}" > SFDX_ORG_URL.json
 
       - name: Authenticate Target Org
-        run: sf org login sfdx-url -f SFDX_ORG_URL.txt
+        run: sf org login sfdx-url -f SFDX_ORG_URL.json
 
       - name: Run apex tests and store test run Id
         run: |
