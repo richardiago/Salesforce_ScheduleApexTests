@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Populate auth file with SFDX_URL secret of org
-        run: echo "${{ secrets.SFDX_ORG_URL }}" > SFDX_ORG_URL.json
+        run: echo "${{ secrets.SFDX_ORG_URL }}" | jq '.' > SFDX_ORG_URL.json
 
       - name: Print auth file contents
         run: cat SFDX_ORG_URL.json
