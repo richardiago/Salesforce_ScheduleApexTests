@@ -1,4 +1,4 @@
-name: Schedule and Run Apex Tests
+name: Run Apex Tests
 
 on:
   workflow_dispatch:
@@ -15,8 +15,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Populate auth file with SFDX_URL secret of org
-        shell: bash
-        run: echo "${{ secrets.SFDX_ORG_URL }}" | jq '.' > SFDX_ORG_URL.json
+        run: echo "${{ secrets.SFDX_ORG_URL }}" > SFDX_ORG_URL.json
 
       - name: Authenticate Target Org
         run: sf org login sfdx-url -f SFDX_ORG_URL.json
