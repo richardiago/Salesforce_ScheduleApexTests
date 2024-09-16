@@ -18,7 +18,7 @@ jobs:
         run: echo "${{ secrets.SFDX_ORG_URL }}" > SFDX_ORG_URL.txt
 
       - name: Authenticate Target Org
-        run: sf org login sfdx-url -f SFDX_ORG_URL.txt
+        run: sf org login sfdx-url -f SFDX_ORG_URL.txt -s
 
       - name: Run apex tests and store test run Id
         run: |
