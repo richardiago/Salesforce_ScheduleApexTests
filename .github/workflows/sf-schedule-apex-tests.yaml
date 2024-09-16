@@ -1,0 +1,25 @@
+name: Schedule and Run Apex Tests
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  run-apex-tests:
+    runs-on: ubuntu-latest
+    container:
+      image: salesforce/cli:latest-full
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Populate auth file with SFDX_URL secret of org
+        run: echo ${{ secrets.SFDX_ORG_URL}} > ./SFDX_ORG_URL.txt
+
+      - name: Authenticate Target Org
+        run: sf org login sfdx-url -f ./SFDX_ORG_URL.txt
+
+      - name: Run Apex tests and store test run Id
+        run: |
+          sf apex run test > ./test-run-id.txt
+          python3 pythonScript.py ./test-run-id.txt
