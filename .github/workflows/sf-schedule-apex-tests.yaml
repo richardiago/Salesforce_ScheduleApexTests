@@ -14,13 +14,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Verify sf CLI installation
+        run: sf --version
+
+      - name: Verify Python installation
+        run: python3 --version
+
       - name: Populate auth file with SFDX_URL secret of org
         run: echo ${{ secrets.SFDX_ORG_URL }} > ./SFDX_ORG_URL.json
 
       - name: Authenticate Target Org
         run: sf org login sfdx-url -f ./SFDX_ORG_URL.json
 
-      - name: Run Apex tests and store test run Id
+      - name: Run apex tests and store test run Id
         run: |
           sf apex run test > ./test-run-id.txt
           python3 pythonScript.py ./test-run-id.txt
