@@ -7,19 +7,27 @@ on:
 
 jobs:
   run-apex-tests:
+    strategy:
+      matrix:
+        sf_org_alias: [STAGEFULL]
+
+    env:
+      ENVIRONMENT: ${{ matrix.sf_org_alias }}
+
     runs-on: ubuntu-latest
     container:
       image: salesforce/cli:latest-full
+
     steps:
 
       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Populate auth file with SFDX_URL secret of org
-        run: echo "${{ secrets.SFDX_ORG_URL }}" > SFDX_ORG_URL.txt
+        run: echo "${{ secrets[format('SFDX_{0}_URL', env.ENVIRONMENT)] }}" > SFDX_${{ matrix.sf_org_alias }}_URL.txt
 
       - name: Authenticate Target Org
-        run: sf org login sfdx-url -f SFDX_ORG_URL.txt -s
+        run: sf org login sfdx-url -f SFDX_${{ matrix.sf_org_alias }}_URL.txt -s
 
       - name: Run apex tests and store test run Id
         run: |
@@ -27,3 +35,10 @@ jobs:
           echo "$output"
           test_id=$(echo "$output" | jq -r '.result.testRunId') 
           echo "Test Run Id: $test_id"
+          echo "$test_id" > ${{ matrix.sf_org_alias }}_test_run_id.txt
+
+      - name: Upload the test run Id as an artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.sf_org_alias }}_test_run_id
+          path: ${{ matrix.sf_org_alias }}_test_run_id.txt
