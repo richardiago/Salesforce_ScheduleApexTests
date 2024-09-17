@@ -17,8 +17,8 @@ jobs:
       #   with:
       #     node-version: 20
 
-      - name: Checkout code
-        uses: actions/checkout@v4
+      # - name: Checkout code
+      #   uses: actions/checkout@v4
 
       - name: Populate auth file with SFDX_URL secret of org
         run: echo "${{ secrets.SFDX_ORG_URL }}" > SFDX_ORG_URL.txt
