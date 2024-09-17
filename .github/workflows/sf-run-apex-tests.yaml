@@ -23,5 +23,7 @@ jobs:
 
       - name: Run apex tests and store test run Id
         run: |
-          sf apex run test > ./test-run-id.txt
-          python3 pythonScript.py ./test-run-id.txt
+          output=$(sf apex run test --json)
+          echo "$output"
+          test_id=$(echo "$output" | jq -r '.result.testRunId') 
+          echo "Test Run Id: $test_id"
