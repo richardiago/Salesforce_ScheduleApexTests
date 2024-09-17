@@ -38,7 +38,7 @@ jobs:
           echo "$test_id" > ${{ matrix.sf_org_alias }}_test_run_id.txt
 
       - name: Upload the test run Id as an artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.sf_org_alias }}_test_run_id
           path: ${{ matrix.sf_org_alias }}_test_run_id.txt
