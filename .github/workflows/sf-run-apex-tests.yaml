@@ -12,13 +12,8 @@ jobs:
       image: salesforce/cli:latest-full
     steps:
 
-      # - name: Setup Node.js
-      #   uses: actions/setup-node@v2
-      #   with:
-      #     node-version: 20
-
-      # - name: Checkout code
-      #   uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Populate auth file with SFDX_URL secret of org
         run: echo "${{ secrets.SFDX_ORG_URL }}" > SFDX_ORG_URL.txt
@@ -28,5 +23,7 @@ jobs:
 
       - name: Run apex tests and store test run Id
         run: |
-          sf apex run test > ./test-run-id.txt
-          python3 pythonScript.py ./test-run-id.txt
+          output=$(sf apex run test --json)
+          echo "$output"
+          test_id=$(echo "$output" | jq -r '.result.testRunId') 
+          echo "Test Run Id: $test_id"
