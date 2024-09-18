@@ -32,9 +32,7 @@ jobs:
       - name: Run apex tests and store test run Id
         run: |
           output=$(sf apex run test --json)
-          echo "$output"
           test_id=$(echo "$output" | jq -r '.result.testRunId') 
-          echo "Test Run Id: $test_id"
           echo "$test_id" > ${{ matrix.sf_org_alias }}_test_run_id.txt
 
       - name: Upload the test run Id as an artifact
