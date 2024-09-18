@@ -44,9 +44,14 @@ jobs:
     - name: Authenticate Target Org
       run: sf org login sfdx-url -f SFDX_${{ matrix.sf_org_alias }}_URL.txt -s
 
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
     - name: Extract apex test results
       run: |
-        sf apex get test -i ${{env.TEST_RUN_ID}} --json > test_results.json
+        sf apex get test -i ${{env.TEST_RUN_ID}} -c --json > test_results.json
 
     - name: Install Python dependencies
       run: pip -m install requests
