@@ -48,6 +48,9 @@ jobs:
       run: |
         sf apex get test -i ${{env.TEST_RUN_ID}} --json > test_results.json
 
+    - name: Install Python dependencies
+      run: pip install requests
+
     - name: Run Python script to parse test results and send to Datadog
       run: python3 parseApexTestResults.py test_results.json ${{ matrix.sf_org_alias }}
 
