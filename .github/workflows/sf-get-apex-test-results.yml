@@ -22,10 +22,15 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Download artifact with test run Id
-      uses: actions/download-artifact@v4
+    # Use 3rd party GitHub action to download the artifact created in the previous job. The artifact contains the test run Id
+    - name: Download artifact
+      id: download-artifact
+      uses: dawidd6/action-download-artifact@v2
       with:
+        workflow: sf-run-apex-tests.yml
+        workflow_conclusion: success
         name: ${{ matrix.sf_org_alias }}_test_run_id
+        name_is_regexp: true
 
     - name: Store test run id in env variable
       run: |
