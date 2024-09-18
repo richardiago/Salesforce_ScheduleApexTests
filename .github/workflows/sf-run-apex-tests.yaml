@@ -31,7 +31,7 @@ jobs:
 
       - name: Run apex tests and store test run Id
         run: |
-          output=$(sf apex run test -n ABNInfoServiceTest --json)
+          output=$(sf apex run test --json)
           test_id=$(echo "$output" | jq -r '.result.testRunId') 
           echo "$test_id" > ${{ matrix.sf_org_alias }}_test_run_id.txt
 
