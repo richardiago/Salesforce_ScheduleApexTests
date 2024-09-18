@@ -52,6 +52,6 @@ jobs:
       run: pip install requests
 
     - name: Run Python script to parse test results and send to Datadog
-      run: python3 parseApexTestResults.py test_results.json ${{ matrix.sf_org_alias }}
+      run: python3 parseApexTestResults.py test_results.json ${{ matrix.sf_org_alias }} ${{ secrets.DATADOG_API_KEY }}
 
     
