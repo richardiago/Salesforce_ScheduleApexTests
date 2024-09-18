@@ -50,8 +50,8 @@ jobs:
         python-version: '3.x'
 
     - name: Install Python dependencies
-      run: pip -m install requests
-      
+      run: python -m pip install requests
+
     - name: Extract apex test results
       run: |
         sf apex get test -i ${{env.TEST_RUN_ID}} -c --json > test_results.json
