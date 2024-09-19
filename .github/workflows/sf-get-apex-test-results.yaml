@@ -30,7 +30,7 @@ jobs:
         workflow: sf-run-apex-tests.yaml
         workflow_conclusion: success
         name: ${{ matrix.sf_org_alias }}_test_run_id
-        name_is_regexp: true
+        # name_is_regexp: true
         
     - name: Set up Python
       uses: actions/setup-python@v4
