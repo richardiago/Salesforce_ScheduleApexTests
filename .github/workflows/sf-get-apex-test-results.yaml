@@ -25,12 +25,20 @@ jobs:
     # Use 3rd party GitHub action to download the artifact created in the previous job. The artifact contains the test run Id
     - name: Download artifact
       id: download-artifact
-      uses: dawidd6/action-download-artifact@v2
+      uses: dawidd6/action-download-artifact@v2.22.0
       with:
         workflow: sf-run-apex-tests.yaml
         workflow_conclusion: success
         name: ${{ matrix.sf_org_alias }}_test_run_id
         name_is_regexp: true
+        
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+    
+    - name: Install Python dependencies
+      run: python -m pip install requests
 
     - name: Store test run id in env variable
       run: |
@@ -44,18 +52,9 @@ jobs:
     - name: Authenticate Target Org
       run: sf org login sfdx-url -f SFDX_${{ matrix.sf_org_alias }}_URL.txt -s
 
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.x'
-
-    - name: Install Python dependencies
-      run: python -m pip install requests
-
     - name: Extract apex test results
       run: |
         sf apex get test -i ${{env.TEST_RUN_ID}} --json > test_results.json
-
 
     - name: Run Python script to parse test results and send to Datadog
       run: python3 parseApexTestResults.py test_results.json ${{ matrix.sf_org_alias }} ${{ secrets.DATADOG_API_KEY }}
