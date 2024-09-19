@@ -54,7 +54,7 @@ jobs:
 
     - name: Extract apex test results
       run: |
-        sf apex get test -i ${{ env.TEST_RUN_ID }} -c --json -d test_results.json
+        echo "sf apex get test -i ${{ env.TEST_RUN_ID }} -c --json" > test_results.json
 
     - name: Run Python script to parse test results and send to Datadog
       run: python3 parseApexTestResults.py test_results.json ${{ matrix.sf_org_alias }} ${{ secrets.DATADOG_API_KEY }}
