@@ -30,7 +30,7 @@ def main():
 		
 	summary = results['result']['summary']
 	test_results = results['result']['tests']
-	# test_coverage = results['result']['coverage']['coverage']
+	test_coverage = results['result']['coverage']['coverage']
 
 	# Send summary result
 	send_log(DATADOG_API_KEY, summary, 'apexTestSummary,'+ environment)
@@ -40,8 +40,8 @@ def main():
 		send_log(DATADOG_API_KEY, test, 'apexTestResults,STAGEFULL')
 
 	# Send test coverage
-	# for coverage in test_coverage:
-	# 	send_log(DATADOG_API_KEY, coverage, 'apexTestCoverage,STAGEFULL')
+	for coverage in test_coverage:
+		send_log(DATADOG_API_KEY, coverage, 'apexTestCoverage,STAGEFULL')
 
 if __name__ == "__main__":
 	main()
