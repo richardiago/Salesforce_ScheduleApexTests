@@ -25,12 +25,12 @@ jobs:
     # Use 3rd party GitHub action to download the artifact created in the previous job. The artifact contains the test run Id
     - name: Download artifact
       id: download-artifact
-      uses: dawidd6/action-download-artifact@v2.22.0
+      uses: dawidd6/action-download-artifact@v6
       with:
         workflow: sf-run-apex-tests.yaml
         workflow_conclusion: success
         name: ${{ matrix.sf_org_alias }}_test_run_id
-        # name_is_regexp: true
+        name_is_regexp: true
         
     - name: Set up Python
       uses: actions/setup-python@v4
