@@ -37,11 +37,11 @@ def main():
 
 	# Send test results
 	for test in test_results:
-		send_log(DATADOG_API_KEY, test, 'apexTestResults,STAGEFULL')
+		send_log(DATADOG_API_KEY, test, 'apexTestResults,'+ environment)
 
 	# Send test coverage
 	for coverage in test_coverage:
-		send_log(DATADOG_API_KEY, coverage, 'apexTestCoverage,STAGEFULL')
+		send_log(DATADOG_API_KEY, coverage, 'apexTestCoverage,'+ environment)
 
 if __name__ == "__main__":
 	main()
