@@ -1,8 +1,9 @@
 import sys
 import json
-import requests
+import urllib.request
+import urllib.parse
 
-def send_log(api_key, log_message, tags):
+def send_log(api_key, log_message, tags, environment, log_status):
 
 	url = "https://http-intake.logs.datadoghq.com/api/v2/logs"
 	headers = {
@@ -12,12 +13,16 @@ def send_log(api_key, log_message, tags):
 	}
 
 	payload = {
-		"ddsource": "apex",
+		"ddsource":"Salesforce",
+		"service":"Riskplatform",
+		"enviroment": environment,
 		"ddtags": tags,
-		"message": log_message
+		"message": log_message,
+		"level": log_status
 	}
 
-	response = requests.post(url, headers=headers, data=json.dumps(payload))
+	req = urllib.request.Request(url, headers=headers, data=json.dumps(payload), method='POST')
+	response = urllib.request.urlopen(req)
 
 def main():
 
@@ -33,15 +38,24 @@ def main():
 	test_coverage = results['result']['coverage']['coverage']
 
 	# Send summary result
-	send_log(DATADOG_API_KEY, summary, 'apexTestSummary,'+ environment)
+	if summary['outcome'] == 'Failed':
+		send_log(DATADOG_API_KEY, summary, 'apexTestSummary', environment, "WARN")
+	else:
+		send_log(DATADOG_API_KEY, summary, 'apexTestSummary', environment, "INFO")
 
 	# Send test results
 	for test in test_results:
-		send_log(DATADOG_API_KEY, test, 'apexTestResults,'+ environment)
+		if test['Outcome'] == 'Fail':
+			send_log(DATADOG_API_KEY, test, 'apexTestResults', environment, "WARN")
+		else:
+			send_log(DATADOG_API_KEY, test, 'apexTestResults', environment, "INFO")
 
 	# Send test coverage
 	for coverage in test_coverage:
-		send_log(DATADOG_API_KEY, coverage, 'apexTestCoverage,'+ environment)
+		if coverage['coveredPercent'] < 75:
+			send_log(DATADOG_API_KEY, coverage, 'apexTestCoverage', environment, "WARN")
+		else:
+			send_log(DATADOG_API_KEY, coverage, 'apexTestCoverage', environment, "INFO")
 
 if __name__ == "__main__":
 	main()
