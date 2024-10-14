@@ -21,7 +21,7 @@ def send_log(api_key, log_message, tags, environment, log_status):
 		"level": log_status
 	}
 
-	req = urllib.request.Request(url, headers=headers, data=json.dumps(payload), method='POST')
+	req = urllib.request.Request(url, headers=headers, data=json.dumps(payload).encode('utf-8'), method='POST')
 	response = urllib.request.urlopen(req)
 
 def main():
